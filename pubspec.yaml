@@ -3,9 +3,9 @@ description: "CLI scaffolding package to initialize a modular GetX Flutter struc
 version: 0.0.2
 
 # Add your real repository/homepage URL before publishing.
-repository: https://github.com/your-org/ub_code_structure
-homepage: https://github.com/your-org/ub_code_structure
-issue_tracker: https://github.com/your-org/ub_code_structure/issues
+repository: https://github.com/UBbeladiya/ub_code_structure
+homepage: https://github.com/UBbeladiya/ub_code_structure
+issue_tracker: https://github.com/UBbeladiya/ub_code_structure/issues
 
 environment:
   sdk: ^3.11.5
