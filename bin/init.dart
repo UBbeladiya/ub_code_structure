@@ -4,6 +4,10 @@ import 'dart:isolate';
 
 import 'package:path/path.dart' as p;
 
+/// Classifies template files when you need custom content per file type.
+///
+/// Most files are copied as-is right now; this enum is kept to support future
+/// transformations (for example, replacing placeholders before writing).
 // Enum for all file types
 enum FileType {
   validators,
@@ -41,7 +45,9 @@ enum FileType {
   other,
 }
 
-// Map file paths to enum
+/// Maps a relative template path to a [FileType].
+///
+/// Returns [FileType.other] for files that do not need special treatment.
 FileType getFileType(String path) {
   if (path.endsWith('core/utils/validators.dart')) return FileType.validators;
   if (path.endsWith('app/bindings/app_binding.dart')) return FileType.appBinding;
@@ -78,9 +84,13 @@ FileType getFileType(String path) {
   return FileType.other;
 }
 
-
+/// Default fallback content for missing template handlers.
 String getTodoContent(String path) => '// TODO: Implement $path\n';
 
+/// Ensures required runtime dependencies are available in the consumer app.
+///
+/// This is executed by `init` after files are copied so imported packages are
+/// ready in the target project.
 Future<void> addDependencies() async {
   final dependencies = ['dio', 'connectivity_plus','get','google_fonts','shared_preferences'];
   // Always try to add dependencies; if already present, pub will skip
@@ -97,6 +107,10 @@ Future<void> addDependencies() async {
   }
 }
 
+/// Reads files under `lib/core/network` and rewrites their content.
+///
+/// The method currently performs a no-op write, but keeps a hook for future
+/// migration logic where generated code may need post-processing.
 Future<void> readAndRewriteNetworkFiles(String networkDirPath) async {
   final dir = Directory(networkDirPath);
   if (await dir.exists()) {
@@ -109,6 +123,7 @@ Future<void> readAndRewriteNetworkFiles(String networkDirPath) async {
   }
 }
 
+/// Prints a directory tree for debugging generation output.
 Future<void> printDirectoryTree(Directory dir, {String prefix = ''}) async {
   final entities = dir.listSync();
   for (final entity in entities) {
@@ -122,11 +137,11 @@ Future<void> printDirectoryTree(Directory dir, {String prefix = ''}) async {
   }
 }
 
-
-
-
-
-
+/// Copies `api_state.dart` from this package into consuming project's
+/// `lib/core/network/` directory.
+///
+/// Package URI resolution is used so this works regardless of where the
+/// package is cached locally.
 Future<void> copyApiStateFile() async {
   try {
     // 1. Resolve your package file URI (Omit 'lib/' in package URIs)
@@ -168,6 +183,10 @@ Future<void> copyApiStateFile() async {
   }
 }
 
+/// Copies only `lib/app/**` templates from this package into target project.
+///
+/// Kept as a focused sync utility when you want to distribute app-layer
+/// scaffolding without copying every package file.
 Future<void> copyAllAppFiles() async {
   try {
     // 1. Anchor using the main api.dart file to find your package's 'lib' directory
@@ -230,6 +249,11 @@ Future<void> copyAllAppFiles() async {
   }
 }
 
+/// Copies package `lib/**` into the consumer project's `lib/**`.
+///
+/// - Skips `api.dart` (package entrypoint is not needed in app `lib`).
+/// - Preserves folder structure.
+/// - Does not overwrite existing files.
 Future<void> copyAllLibFiles() async {
   try {
     // Anchor using the package's public entry file to find its lib directory.
@@ -294,6 +318,10 @@ Future<void> copyAllLibFiles() async {
   }
 }
 
+/// Entrypoint for `dart run ub_code_structure:init`.
+///
+/// Creates target `lib` folder (if needed), copies template files, then
+/// installs dependencies required by generated source.
 void main(List<String> args) async {
   final base = Directory('${Directory.current.path}/lib');
   if (!await base.exists()) {

@@ -3,10 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ub_code_structure/ub_code_structure.dart';
 
 void main() {
-  test('adds one to input values', () {
-    final calculator = Calculator();
-    expect(calculator.addOne(2), 3);
-    expect(calculator.addOne(-7), -6);
-    expect(calculator.addOne(0), 1);
+  test('exposes package metadata', () {
+    expect(UbCodeStructure.packageName, 'ub_code_structure');
+    expect(UbCodeStructure.summary, isNotEmpty);
   });
 }

@@ -1,7 +1,11 @@
 name: ub_code_structure
-description: "A new Flutter package project."
+description: "CLI scaffolding package to initialize a modular GetX Flutter structure and generate feature modules."
 version: 0.0.1
-homepage:
+
+# Add your real repository/homepage URL before publishing.
+repository: https://github.com/your-org/ub_code_structure
+homepage: https://github.com/your-org/ub_code_structure
+issue_tracker: https://github.com/your-org/ub_code_structure/issues
 
 environment:
   sdk: ^3.11.5
@@ -11,6 +15,7 @@ dependencies:
   flutter:
     sdk: flutter
   args: ^2.0.0
+  path: ^1.9.1
   dio: ^5.9.2
   connectivity_plus: ^7.1.1
   get: ^4.7.3
@@ -23,8 +28,8 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 executables:
-  init: bin/init.dart
-  create: bin/create.dart
+  init: init
+  create: create
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

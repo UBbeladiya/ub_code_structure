@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:path/path.dart' as p;
 
+/// CLI options for `ub_code_structure:create`.
+///
+/// These flags control which files are generated and whether generation writes
+/// to disk (`dryRun`) or replaces existing modules (`force`).
 class CreateOptions {
   const CreateOptions({
     required this.withModel,
@@ -19,7 +23,14 @@ class CreateOptions {
   final bool flat;
 }
 
-/// Normalize names like ProductDetail, product-detail, product detail to snake_case.
+/// Converts a feature name into a stable snake_case identifier.
+///
+/// Supported inputs:
+/// - `ProductDetail` -> `product_detail`
+/// - `product-detail` -> `product_detail`
+/// - `product detail` -> `product_detail`
+///
+/// This is used for folder and file naming.
 String toSnakeCase(String str) {
   final normalized = str
       .trim()
@@ -32,6 +43,9 @@ String toSnakeCase(String str) {
   return normalized;
 }
 
+/// Converts snake_case to PascalCase for Dart type names.
+///
+/// Example: `product_detail` -> `ProductDetail`.
 String toPascalCase(String snakeCase) {
   return snakeCase
       .split('_')
@@ -40,6 +54,7 @@ String toPascalCase(String snakeCase) {
       .join();
 }
 
+/// Builds the command parser for `create` with all supported flags.
 ArgParser _buildParser() {
   return ArgParser()
     ..addFlag('with-model', abbr: 'm', help: 'Generate models/<module>_model.dart.')
@@ -50,6 +65,7 @@ ArgParser _buildParser() {
     ..addFlag('help', abbr: 'h', negatable: false, help: 'Show usage.');
 }
 
+/// Prints help text and examples.
 void _printUsage(ArgParser parser) {
   print('Usage: dart run ub_code_structure:create <module_name> [options]');
   print('');
@@ -63,6 +79,10 @@ void _printUsage(ArgParser parser) {
   print(parser.usage);
 }
 
+/// Generates a complete feature module under `lib/features/<module>`.
+///
+/// The method validates the module name, calculates all target directories and
+/// files, supports a `dry-run` preview, and writes template files.
 Future<void> createModule(String moduleName, CreateOptions options) async {
   try {
     final snakeCase = toSnakeCase(moduleName);
@@ -85,6 +105,7 @@ Future<void> createModule(String moduleName, CreateOptions options) async {
     }
 
     final directories = <String>[
+      // In flat mode all files are placed directly under feature root.
       if (options.flat) featurePath,
       if (!options.flat) p.join(featurePath, 'bindings'),
       if (!options.flat) p.join(featurePath, 'controllers'),
@@ -94,6 +115,7 @@ Future<void> createModule(String moduleName, CreateOptions options) async {
     ];
 
     final plannedFiles = <String>[
+      // Keep this list in sync with file creation methods below.
       if (options.flat) '${snakeCase}_binding.dart' else p.join('bindings', '${snakeCase}_binding.dart'),
       if (options.flat) '${snakeCase}_controller.dart' else p.join('controllers', '${snakeCase}_controller.dart'),
       if (options.flat) '${snakeCase}_view.dart' else p.join('views', '${snakeCase}_view.dart'),
@@ -152,6 +174,7 @@ Future<void> createModule(String moduleName, CreateOptions options) async {
   }
 }
 
+/// Creates the GetX binding file and wires controller registration.
 Future<void> _createBindingFile(String featurePath, String snakeCase, String pascalCase, bool flat) async {
   final filePath =
       flat ? p.join(featurePath, '${snakeCase}_binding.dart') : p.join(featurePath, 'bindings', '${snakeCase}_binding.dart');
@@ -173,6 +196,7 @@ class ${pascalCase}Binding extends Bindings {
   print('Created: ${flat ? '${snakeCase}_binding.dart' : 'bindings/${snakeCase}_binding.dart'}');
 }
 
+/// Creates the GetX controller template for the feature.
 Future<void> _createControllerFile(String featurePath, String snakeCase, String pascalCase, bool flat) async {
   final filePath =
       flat ? p.join(featurePath, '${snakeCase}_controller.dart') : p.join(featurePath, 'controllers', '${snakeCase}_controller.dart');
@@ -195,6 +219,7 @@ class ${pascalCase}Controller extends GetxController {
   print('Created: ${flat ? '${snakeCase}_controller.dart' : 'controllers/${snakeCase}_controller.dart'}');
 }
 
+/// Creates a basic GetView scaffold for the feature UI screen.
 Future<void> _createViewFile(String featurePath, String snakeCase, String pascalCase, bool flat) async {
   final filePath =
       flat ? p.join(featurePath, '${snakeCase}_view.dart') : p.join(featurePath, 'views', '${snakeCase}_view.dart');
@@ -228,6 +253,7 @@ class ${pascalCase}View extends GetView<${pascalCase}Controller> {
   print('Created: ${flat ? '${snakeCase}_view.dart' : 'views/${snakeCase}_view.dart'}');
 }
 
+/// Creates a placeholder model class with JSON helpers.
 Future<void> _createModelFile(String featurePath, String snakeCase, String pascalCase, bool flat) async {
   final filePath = flat ? p.join(featurePath, '${snakeCase}_model.dart') : p.join(featurePath, 'models', '${snakeCase}_model.dart');
   final content =
@@ -247,6 +273,7 @@ Future<void> _createModelFile(String featurePath, String snakeCase, String pasca
   print('Created: ${flat ? '${snakeCase}_model.dart' : 'models/${snakeCase}_model.dart'}');
 }
 
+/// Creates a placeholder repository class for data access logic.
 Future<void> _createRepositoryFile(String featurePath, String snakeCase, String pascalCase, bool flat) async {
   final filePath =
       flat ? p.join(featurePath, '${snakeCase}_repository.dart') : p.join(featurePath, 'repository', '${snakeCase}_repository.dart');
@@ -263,6 +290,10 @@ Future<void> _createRepositoryFile(String featurePath, String snakeCase, String 
   print('Created: ${flat ? '${snakeCase}_repository.dart' : 'repository/${snakeCase}_repository.dart'}');
 }
 
+/// Entrypoint for `dart run ub_code_structure:create ...`.
+///
+/// Parses CLI args, validates required positional module name, and delegates
+/// generation to [createModule].
 Future<void> main(List<String> args) async {
   final parser = _buildParser();
   late final ArgResults results;
