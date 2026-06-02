@@ -16,3 +16,8 @@
 ## 0.0.3
 
 - Change git url
+
+## 0.0.4
+- splash and dashboard view add.
+- main dart add theme file.
+- version 0.0.4 publish
