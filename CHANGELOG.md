@@ -11,3 +11,8 @@
 - Updated package metadata and publishing setup for pub.dev release.
 - Expanded Dartdoc coverage for key public APIs to improve pub points.
 - Added stricter analysis guidance for API documentation quality.
+
+
+## 0.0.3
+
+- Change git url
