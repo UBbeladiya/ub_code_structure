@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Reusable placeholder shown when there is no data to display.
 class AppEmptyState extends StatelessWidget {
+  /// Creates an empty-state view with optional icon and action.
   const AppEmptyState({
     super.key,
     required this.message,
@@ -8,8 +10,13 @@ class AppEmptyState extends StatelessWidget {
     this.action,
   });
 
+  /// Main descriptive message.
   final String message;
+
+  /// Icon rendered above the message.
   final IconData icon;
+
+  /// Optional action widget shown below the message.
   final Widget? action;
 
   @override
@@ -32,4 +39,3 @@ class AppEmptyState extends StatelessWidget {
     );
   }
 }
-

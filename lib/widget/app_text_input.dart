@@ -1,33 +1,62 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
+/// Cupertino-styled input field with Material-themed borders and validation UI.
 class PrimaryTextField extends StatelessWidget {
+  /// Placeholder text rendered when the field is empty.
   final String placeholder;
+
+  /// Optional controller used to read/write the current value.
   final TextEditingController? controller;
+
+  /// Keyboard type used by the platform IME.
   final TextInputType? keyboardType;
 
-  //
+  /// Tap callback for the inner text field.
   final GestureTapCallback? onTap;
+
+  /// Value change callback.
   final ValueChanged<String>? onChanged;
+
+  /// Callback fired when editing completes.
   final VoidCallback? onEditingComplete;
+
+  /// Whether this field is read-only.
   final bool readOnly;
+
+  /// Whether entered text is obscured.
   final bool isObscure;
+
+  /// Focus node used to control and observe focus state.
   final FocusNode? focusNode;
+
+  /// Minimum number of visible lines.
   final int? minLines;
+
+  /// Maximum number of visible lines.
   final int? maxLines;
+
+  /// Border radius value for the container.
   final double? borderRadius;
+
+  /// Validator used by the wrapping [FormField].
   final FormFieldValidator<String>? validator;
+
+  /// Optional trailing widget rendered inside the text field.
   final Widget? trailing;
+
+  /// Optional focused border color override.
   final Color? focusBorderColor;
+
+  /// Optional focused border width override.
   final double? focusBorderWidth;
 
+  /// Creates a configurable primary text field.
   const PrimaryTextField({
     super.key,
     required this.placeholder,
     this.controller,
     this.keyboardType,
-    //
     this.onTap,
     this.onChanged,
     this.onEditingComplete,

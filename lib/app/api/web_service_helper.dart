@@ -114,7 +114,7 @@ class WebserviceHelper<T> {
       } else {
         return {'success': false, 'message': 'data is not a Map<String, dynamic>'};
       }
-    } on DioException catch (error, stacktrace) {
+    } on DioException catch (error) {
 
       var errorMessage = 'Something Went Wrong';
       if (CancelToken.isCancel(error)) {
@@ -122,7 +122,7 @@ class WebserviceHelper<T> {
       }
 
       return {'success': false, 'message': errorMessage};
-    } catch (error, stacktrace) {
+    } catch (error) {
 
       return {'success': false, 'message': 'Something Went Wrong'};
     }

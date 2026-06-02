@@ -23,7 +23,7 @@ Future<bool> isInternetAvailable() async {
     return response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300;
   } on DioException catch (e) {
     // Connected to network but no real internet
-    print('Dio Error: \${e.message}');
+    print('Dio Error: ${e.message}');
     return false;
   } catch (_) {
     return false;

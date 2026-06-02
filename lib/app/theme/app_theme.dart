@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
-
-
+/// Centralized theme configuration for light and dark modes.
 class AppTheme {
+  /// Light color scheme and typography used by default.
   static ThemeData get light => ThemeData(
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.background,
@@ -40,5 +40,6 @@ class AppTheme {
     ),
   );
 
+  /// Dark theme configuration.
   static ThemeData get dark => light;
 }
