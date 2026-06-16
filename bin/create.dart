@@ -43,14 +43,29 @@ String toSnakeCase(String str) {
   return normalized;
 }
 
-/// Converts snake_case to PascalCase for Dart type names.
+/// Normalizes a module path while preserving nesting separators.
 ///
-/// Example: `product_detail` -> `ProductDetail`.
+/// Examples:
+/// - `auth/registration` -> `auth/registration`
+/// - `Auth/RegistrationFlow` -> `auth/registration_flow`
+/// - ` auth\\Registration ` -> `auth/registration`
+String toModulePath(String input) {
+  final segments = input
+      .trim()
+      .split(RegExp(r'[\\/]+'))
+      .map(toSnakeCase)
+      .where((segment) => segment.isNotEmpty)
+      .toList();
+
+  return segments.join('/');
+}
+
+/// Converts snake_case into PascalCase for class names.
 String toPascalCase(String snakeCase) {
   return snakeCase
       .split('_')
-      .where((word) => word.isNotEmpty)
-      .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
+      .where((segment) => segment.isNotEmpty)
+      .map((segment) => '${segment[0].toUpperCase()}${segment.substring(1)}')
       .join();
 }
 
@@ -85,16 +100,18 @@ void _printUsage(ArgParser parser) {
 /// files, supports a `dry-run` preview, and writes template files.
 Future<void> createModule(String moduleName, CreateOptions options) async {
   try {
-    final snakeCase = toSnakeCase(moduleName);
-    if (snakeCase.isEmpty) {
+    final modulePath = toModulePath(moduleName);
+    if (modulePath.isEmpty) {
       print('Error: module name cannot be empty.');
       return;
     }
 
-    final pascalCase = toPascalCase(snakeCase);
+    final pathSegments = modulePath.split('/');
+    final moduleKey = pathSegments.last;
+    final pascalCase = toPascalCase(moduleKey);
 
     final libPath = p.join(Directory.current.path, 'lib');
-    final featurePath = p.join(libPath, 'features', snakeCase);
+    final featurePath = p.joinAll([libPath, 'features', ...pathSegments]);
     final moduleDirectory = Directory(featurePath);
 
     if (await moduleDirectory.exists() && !options.force) {
@@ -116,18 +133,18 @@ Future<void> createModule(String moduleName, CreateOptions options) async {
 
     final plannedFiles = <String>[
       // Keep this list in sync with file creation methods below.
-      if (options.flat) '${snakeCase}_binding.dart' else p.join('bindings', '${snakeCase}_binding.dart'),
-      if (options.flat) '${snakeCase}_controller.dart' else p.join('controllers', '${snakeCase}_controller.dart'),
-      if (options.flat) '${snakeCase}_view.dart' else p.join('views', '${snakeCase}_view.dart'),
+      if (options.flat) '${moduleKey}_binding.dart' else p.join('bindings', '${moduleKey}_binding.dart'),
+      if (options.flat) '${moduleKey}_controller.dart' else p.join('controllers', '${moduleKey}_controller.dart'),
+      if (options.flat) '${moduleKey}_view.dart' else p.join('views', '${moduleKey}_view.dart'),
       if (options.withModel)
-        if (options.flat) '${snakeCase}_model.dart' else p.join('models', '${snakeCase}_model.dart'),
+        if (options.flat) '${moduleKey}_model.dart' else p.join('models', '${moduleKey}_model.dart'),
       if (options.withRepository)
-        if (options.flat) '${snakeCase}_repository.dart' else p.join('repository', '${snakeCase}_repository.dart'),
+        if (options.flat) '${moduleKey}_repository.dart' else p.join('repository', '${moduleKey}_repository.dart'),
     ];
 
     if (options.dryRun) {
       print('Dry run: no files were changed.');
-      print('Module: $snakeCase');
+      print('Module: $modulePath');
       print('Target: $featurePath');
       print('Directories to create:');
       for (final dir in directories) {
@@ -144,19 +161,19 @@ Future<void> createModule(String moduleName, CreateOptions options) async {
       await Directory(dir).create(recursive: true);
     }
 
-    await _createBindingFile(featurePath, snakeCase, pascalCase, options.flat);
-    await _createControllerFile(featurePath, snakeCase, pascalCase, options.flat);
-    await _createViewFile(featurePath, snakeCase, pascalCase, options.flat);
+    await _createBindingFile(featurePath, moduleKey, pascalCase, options.flat);
+    await _createControllerFile(featurePath, moduleKey, pascalCase, options.flat);
+    await _createViewFile(featurePath, moduleKey, pascalCase, options.flat);
 
     if (options.withModel) {
-      await _createModelFile(featurePath, snakeCase, pascalCase, options.flat);
+      await _createModelFile(featurePath, moduleKey, pascalCase, options.flat);
     }
 
     if (options.withRepository) {
-      await _createRepositoryFile(featurePath, snakeCase, pascalCase, options.flat);
+      await _createRepositoryFile(featurePath, moduleKey, pascalCase, options.flat);
     }
 
-    print('Module "$snakeCase" created successfully.');
+    print('Module "$modulePath" created successfully.');
     print('Location: $featurePath');
     print('Created files:');
     for (final file in plannedFiles) {
@@ -164,9 +181,9 @@ Future<void> createModule(String moduleName, CreateOptions options) async {
     }
     print('');
     print('Add these route entries manually:');
-    print('  AppRoutes.$snakeCase = "/$snakeCase"');
+    print('   static const AppRoutes $moduleKey = "/$modulePath";');
     print(
-      '  GetPage(name: AppRoutes.$snakeCase, page: () => const ${pascalCase}View(), binding: ${pascalCase}Binding())',
+      '  GetPage(name: AppRoutes.$moduleKey, page: () => const ${pascalCase}View(), binding: ${pascalCase}Binding())',
     );
   } catch (e) {
     print('Error creating module: $e');

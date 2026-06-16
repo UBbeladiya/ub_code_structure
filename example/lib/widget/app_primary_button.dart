@@ -2,18 +2,39 @@ import 'package:flutter/material.dart';
 
 import 'app_loading_indicator.dart';
 
+/// Primary filled action button used for high-emphasis actions.
 class PrimaryButton extends StatelessWidget {
+  /// Target width of the button.
   final double width;
+
+  /// Target height of the button.
   final double height;
+
+  /// Optional override for filled background color.
   final Color? backgroundColor, textColor, disabledColor;
+
+  /// Callback invoked when the button is tapped.
   final VoidCallback? onPressed;
+
+  /// Visible button label.
   final String title;
+
+  /// Whether to show a loading spinner and disable tap actions.
   final bool isLoading;
+
+  /// Whether to force bold title text.
   final bool isFontBold;
+
+  /// Optional leading icon.
   final IconData? preFixIcon;
+
+  /// Optional leading image path.
   final String? preFixImage;
+
+  /// Opacity used for the disabled state.
   final double? alpha;
 
+  /// Creates a fixed-size primary button.
   const PrimaryButton(
       this.title, {
         this.width = 200,
@@ -30,6 +51,7 @@ class PrimaryButton extends StatelessWidget {
         super.key,
       });
 
+  /// Creates a full-width primary button.
   const PrimaryButton.infinity(
       this.title, {
         this.height = 44,
@@ -117,15 +139,30 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
+/// Outlined medium-emphasis button.
 class SecondaryButton extends StatelessWidget {
+  /// Target width of the button.
   final double width;
+
+  /// Target height of the button.
   final double height;
+
+  /// Callback invoked when the button is tapped.
   final VoidCallback? onPressed;
+
+  /// Visible button label.
   final String title;
+
+  /// Whether to show a loading spinner and disable tap actions.
   final bool isLoading;
+
+  /// Optional override for text color.
   final Color? textColor;
+
+  /// Optional override for border color.
   final Color? outlineColor;
 
+  /// Creates a fixed-size secondary button.
   const SecondaryButton(
       this.title, {
         super.key,
@@ -137,6 +174,7 @@ class SecondaryButton extends StatelessWidget {
         this.outlineColor,
       });
 
+  /// Creates a full-width secondary button.
   const SecondaryButton.infinity(
       this.title, {
         this.height = 44,
@@ -174,24 +212,39 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 
+/// Icon style metadata used by [TertiaryButton].
 class TertiaryButtonIconStyle {
+  /// Whether the icon should be rendered before the title text.
   final bool iconOnLeft;
+
+  /// Icon glyph rendered beside the title.
   final IconData iconData;
 
+  /// Creates icon style options for a tertiary button.
   const TertiaryButtonIconStyle({
     this.iconData = Icons.chevron_left,
     this.iconOnLeft = true,
   });
 }
 
+/// Low-emphasis text button optionally paired with an icon.
 class TertiaryButton extends StatelessWidget {
+  /// Callback invoked when the button is tapped.
   final VoidCallback? onPressed;
+
+  /// Internal button padding.
   final EdgeInsets? padding;
+
+  /// Visible button label.
   final String title;
+
+  /// Optional override for foreground text/icon color.
   final Color? textColor;
 
+  /// Optional icon style for rendering an icon with text.
   final TertiaryButtonIconStyle? iconStyle;
 
+  /// Creates a tertiary text button.
   const TertiaryButton(
       this.title, {
         super.key,
@@ -231,8 +284,9 @@ class TertiaryButton extends StatelessWidget {
   }
 }
 
-
+/// Tappable icon button built with a gesture detector and custom decoration.
 class AppGestureIconButton extends StatelessWidget {
+  /// Creates an icon-only action button.
   const AppGestureIconButton({
     super.key,
     required this.icon,
@@ -244,12 +298,25 @@ class AppGestureIconButton extends StatelessWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
   });
 
+  /// Icon glyph to render.
   final IconData icon;
+
+  /// Callback fired when the widget is tapped.
   final VoidCallback? onTap;
+
+  /// Icon visual size.
   final double iconSize;
+
+  /// Optional icon color override.
   final Color? iconColor;
+
+  /// Optional background color override.
   final Color? backgroundColor;
+
+  /// Internal content padding.
   final EdgeInsetsGeometry padding;
+
+  /// Corner radius of the background container.
   final BorderRadiusGeometry borderRadius;
 
   @override

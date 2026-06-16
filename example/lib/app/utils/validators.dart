@@ -1,5 +1,3 @@
-
-
 /// Enum for validator types.
 enum ValidatorType { email, password, name, mobile }
 
@@ -22,7 +20,7 @@ class Validators {
   /// Validates an email address. Returns null if valid, otherwise an error message.
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) return 'Email is required';
-    final emailRegex = RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}\$');
+    final emailRegex = RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) return 'Enter a valid email';
     return null;
   }
@@ -44,7 +42,7 @@ class Validators {
   /// Validates a 10-digit mobile number. Returns null if valid, otherwise an error message.
   static String? validateMobile(String? value) {
     if (value == null || value.isEmpty) return 'Mobile number is required';
-    final mobileRegex = RegExp(r'^\d{10}\$');
+    final mobileRegex = RegExp(r'^\d{10}$');
     if (!mobileRegex.hasMatch(value)) return 'Enter a valid 10-digit mobile number';
     return null;
   }

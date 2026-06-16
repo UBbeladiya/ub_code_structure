@@ -21,3 +21,13 @@
 - splash and dashboard view add.
 - main dart add theme file.
 - version 0.0.4 publish
+
+
+
+## 0.0.5
+- Added complete login flow with email/password form using shared UI components.
+- Added reusable `PrimaryPasswordTextField` with password visibility toggle.
+- Implemented registration form with profile image picker, gender, DOB, mobile, role, password, and confirm password fields.
+- Connected shared validators across auth forms and fixed email/mobile regex validation behavior.
+- Added auth routing updates (`splash -> login`, `signup -> registration`) and dashboard navigation.
+- Added dashboard argument handling to display logged-in user email and password.

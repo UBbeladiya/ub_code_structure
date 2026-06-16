@@ -92,7 +92,7 @@ String getTodoContent(String path) => '// TODO: Implement $path\n';
 /// This is executed by `init` after files are copied so imported packages are
 /// ready in the target project.
 Future<void> addDependencies() async {
-  final dependencies = ['dio', 'connectivity_plus','get','google_fonts','shared_preferences'];
+  final dependencies = ['dio', 'connectivity_plus','get','google_fonts','shared_preferences','permission_handler','image_picker','device_info_plus'];
   // Always try to add dependencies; if already present, pub will skip
   final addCmd = ['pub', 'add', ...dependencies];
   log('Ensuring dependencies: \\${dependencies.join(", ")}');

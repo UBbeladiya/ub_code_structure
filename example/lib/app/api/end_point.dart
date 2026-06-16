@@ -1,30 +1,45 @@
 
 
-import 'package:ub_code_structure/app/utils/utils.dart';
-
 import '../services/storage_service.dart';
+import '../utils/utils.dart';
 import 'endpoint_http_type.dart';
 
+/// Contract that describes a configured API endpoint.
 abstract class EndpointType {
+  /// Base host URL.
   String get baseURL;
 
+  /// Relative endpoint path.
   String get path;
 
+  /// Full endpoint URL (`baseURL + path`).
   String get url;
 
+  /// HTTP method to use for this endpoint.
   EndpointHTTPType get httpMethod;
 
+  /// Request body content type.
   String get contentType;
 
+  /// Request headers to send.
   Map<String, dynamic> get headers;
 }
 
+/// Default API host used by [Endpoint].
 const appBaseURL = 'https://jsonplaceholder.typicode.com';
 
+/// Built-in endpoint catalog used by [WebserviceHelper].
 enum Endpoint implements EndpointType {
+  /// Fetches all posts.
   posts,
+
+  /// Creates a new post.
   addPost,
+
+  /// Updates a post by id.
   postsId,
+
+  /// Deletes a post by id.
   deletePostId,
   ;
 

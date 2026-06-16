@@ -1,33 +1,62 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
+/// Cupertino-styled input field with Material-themed borders and validation UI.
 class PrimaryTextField extends StatelessWidget {
+  /// Placeholder text rendered when the field is empty.
   final String placeholder;
+
+  /// Optional controller used to read/write the current value.
   final TextEditingController? controller;
+
+  /// Keyboard type used by the platform IME.
   final TextInputType? keyboardType;
 
-  //
+  /// Tap callback for the inner text field.
   final GestureTapCallback? onTap;
+
+  /// Value change callback.
   final ValueChanged<String>? onChanged;
+
+  /// Callback fired when editing completes.
   final VoidCallback? onEditingComplete;
+
+  /// Whether this field is read-only.
   final bool readOnly;
+
+  /// Whether entered text is obscured.
   final bool isObscure;
+
+  /// Focus node used to control and observe focus state.
   final FocusNode? focusNode;
+
+  /// Minimum number of visible lines.
   final int? minLines;
+
+  /// Maximum number of visible lines.
   final int? maxLines;
+
+  /// Border radius value for the container.
   final double? borderRadius;
+
+  /// Validator used by the wrapping [FormField].
   final FormFieldValidator<String>? validator;
+
+  /// Optional trailing widget rendered inside the text field.
   final Widget? trailing;
+
+  /// Optional focused border color override.
   final Color? focusBorderColor;
+
+  /// Optional focused border width override.
   final double? focusBorderWidth;
 
+  /// Creates a configurable primary text field.
   const PrimaryTextField({
     super.key,
     required this.placeholder,
     this.controller,
     this.keyboardType,
-    //
     this.onTap,
     this.onChanged,
     this.onEditingComplete,
@@ -108,6 +137,68 @@ class PrimaryTextField extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+
+/// Password field built on top of [PrimaryTextField] to keep same app theme.
+class PrimaryPasswordTextField extends StatefulWidget {
+  final String placeholder;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onEditingComplete;
+  final GestureTapCallback? onTap;
+  final Color? focusBorderColor;
+  final double? focusBorderWidth;
+  final double? borderRadius;
+
+  const PrimaryPasswordTextField({
+    super.key,
+    this.placeholder = 'Password',
+    this.controller,
+    this.focusNode,
+    this.validator,
+    this.onChanged,
+    this.onEditingComplete,
+    this.onTap,
+    this.focusBorderColor,
+    this.focusBorderWidth,
+    this.borderRadius,
+  });
+
+  @override
+  State<PrimaryPasswordTextField> createState() => _PrimaryPasswordTextFieldState();
+}
+
+class _PrimaryPasswordTextFieldState extends State<PrimaryPasswordTextField> {
+  bool _obscure = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryTextField(
+      placeholder: widget.placeholder,
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      validator: widget.validator,
+      onChanged: widget.onChanged,
+      onEditingComplete: widget.onEditingComplete,
+      onTap: widget.onTap,
+      isObscure: _obscure,
+      maxLines: 1,
+      borderRadius: widget.borderRadius,
+      focusBorderColor: widget.focusBorderColor,
+      focusBorderWidth: widget.focusBorderWidth,
+      trailing: IconButton(
+        onPressed: () => setState(() => _obscure = !_obscure),
+        icon: Icon(
+          _obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+          size: 20,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+      ),
     );
   }
 }

@@ -1,6 +1,6 @@
 name: ub_code_structure
 description: "CLI scaffolding package to initialize a modular GetX Flutter structure and generate feature modules."
-version: 0.0.4
+version: 0.0.5
 
 # Add your real repository/homepage URL before publishing.
 repository: https://github.com/UBbeladiya/ub_code_structure
@@ -21,6 +21,9 @@ dependencies:
   get: ^4.7.3
   google_fonts: ^8.1.0
   shared_preferences: ^2.5.5
+  permission_handler: ^12.0.3
+  device_info_plus: ^13.1.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

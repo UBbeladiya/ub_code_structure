@@ -140,3 +140,65 @@ class PrimaryTextField extends StatelessWidget {
     );
   }
 }
+
+
+/// Password field built on top of [PrimaryTextField] to keep same app theme.
+class PrimaryPasswordTextField extends StatefulWidget {
+  final String placeholder;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onEditingComplete;
+  final GestureTapCallback? onTap;
+  final Color? focusBorderColor;
+  final double? focusBorderWidth;
+  final double? borderRadius;
+
+  const PrimaryPasswordTextField({
+    super.key,
+    this.placeholder = 'Password',
+    this.controller,
+    this.focusNode,
+    this.validator,
+    this.onChanged,
+    this.onEditingComplete,
+    this.onTap,
+    this.focusBorderColor,
+    this.focusBorderWidth,
+    this.borderRadius,
+  });
+
+  @override
+  State<PrimaryPasswordTextField> createState() => _PrimaryPasswordTextFieldState();
+}
+
+class _PrimaryPasswordTextFieldState extends State<PrimaryPasswordTextField> {
+  bool _obscure = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryTextField(
+      placeholder: widget.placeholder,
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      validator: widget.validator,
+      onChanged: widget.onChanged,
+      onEditingComplete: widget.onEditingComplete,
+      onTap: widget.onTap,
+      isObscure: _obscure,
+      maxLines: 1,
+      borderRadius: widget.borderRadius,
+      focusBorderColor: widget.focusBorderColor,
+      focusBorderWidth: widget.focusBorderWidth,
+      trailing: IconButton(
+        onPressed: () => setState(() => _obscure = !_obscure),
+        icon: Icon(
+          _obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+          size: 20,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
+}

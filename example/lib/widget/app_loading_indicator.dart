@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// Centered loading indicator with optional message text.
 class AppLoadingIndicator extends StatelessWidget {
+  /// Creates a loading indicator widget.
   const AppLoadingIndicator({super.key, this.message});
 
+  /// Optional message displayed below the spinner.
   final String? message;
 
   @override
@@ -21,4 +24,3 @@ class AppLoadingIndicator extends StatelessWidget {
     );
   }
 }
-
