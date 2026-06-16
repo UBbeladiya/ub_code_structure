@@ -67,6 +67,7 @@ dart run ub_code_structure:create user_profile --with-model --with-repository
 dart run ub_code_structure:create ProductDetail --dry-run
 dart run ub_code_structure:create ProductDetail --flat
 dart run ub_code_structure:create ProductDetail --flat --force
+dart run ub_code_structure:create auth/registration
 ```
 
 ### Generated module layout (default)
