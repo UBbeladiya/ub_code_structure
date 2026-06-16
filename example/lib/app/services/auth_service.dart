@@ -1,7 +1,7 @@
 
 import 'package:ub_code_structure/app/api/end_point.dart';
 import 'package:ub_code_structure/app/api/web_service_helper.dart';
-import 'package:ub_code_structure/app/models/prodect_model.dart';
+import 'package:ub_code_structure/app/models/product_model.dart';
 import 'package:ub_code_structure/app/utils/utils.dart';
 
 

@@ -1,6 +1,7 @@
-import 'package:ub_code_structure/app/utils/utils.dart';
+
 
 import '../services/storage_service.dart';
+import '../utils/utils.dart';
 import 'endpoint_http_type.dart';
 
 /// Contract that describes a configured API endpoint.

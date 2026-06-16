@@ -1,13 +1,10 @@
 import 'dart:developer';
 
-
-
 import 'package:dio/dio.dart';
-import 'package:ub_code_structure/app/utils/utils.dart';
 
 import '../utils/logger.dart';
+import '../utils/utils.dart';
 import 'curl_logger_interceptor.dart';
-
 import 'end_point.dart';
 import 'endpoint_http_type.dart';
 import 'network_response_object.dart';
@@ -24,7 +21,7 @@ class WebserviceHelper<T> {
   final ProgressCallback? onReceiveProgress;
   final CancelToken? cancelToken;
 
-  WebserviceHelper({
+   WebserviceHelper({
     required this.endPointType,
     this.itemFromJson,
     this.params,
@@ -86,7 +83,6 @@ class WebserviceHelper<T> {
           response = await _dio.patch(url, queryParameters: queryParameters, data: params);
           break;
         case EndpointHTTPType.postMultipart:
-
           response = await _dio.post(
             url,
             queryParameters: queryParameters,
@@ -100,14 +96,12 @@ class WebserviceHelper<T> {
       }
       final data = response.data;
       if (data is Map<String, dynamic> || data is List) {
-
         Utils.debugLog(title: "data => ${endPointType.httpMethod}", object: data);
 
-
-        Map<String, dynamic>  mapData ;
+        Map<String, dynamic> mapData;
         if (data is Map<String, dynamic>) {
           mapData = data;
-        }else{
+        } else {
           mapData = {'data': data};
         }
         return {'statusCode': response.statusCode, 'success': true, ...mapData};
@@ -115,7 +109,6 @@ class WebserviceHelper<T> {
         return {'success': false, 'message': 'data is not a Map<String, dynamic>'};
       }
     } on DioException catch (error) {
-
       var errorMessage = 'Something Went Wrong';
       if (CancelToken.isCancel(error)) {
         errorMessage = error.message ?? errorMessage;
@@ -123,7 +116,6 @@ class WebserviceHelper<T> {
 
       return {'success': false, 'message': errorMessage};
     } catch (error) {
-
       return {'success': false, 'message': 'Something Went Wrong'};
     }
   }
